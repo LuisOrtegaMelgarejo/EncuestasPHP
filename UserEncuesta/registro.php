@@ -23,7 +23,19 @@ session_start();
       </div>
   
       <div class="login-box-body">
-        <form action="Controllers/Conexion_Login.php" method="post">
+        <form action="Controllers/Registrar_user.php" method="post">
+           <div class="form-group has-feedback">
+            <input type="Cuenta" name="nombre_usuario" class="form-control" placeholder="Nombre" pattern="^[a-zA-Z]+$" title="Nombre" required>
+              <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          </div> 
+          <div class="form-group has-feedback">
+            <input type="Cuenta" name="apellido_usuario" class="form-control" placeholder="Apellidos" pattern="^[a-zA-Z]+$" title="Apellidos" required>
+              <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          </div> 
+          <div class="form-group has-feedback">
+            <input type="Cuenta" name="codigo_usuario" class="form-control" placeholder="Codigo" pattern="^[0-9]+$" title="Codigo" required>
+              <span class="glyphicon glyphicon-asterisk form-control-feedback"></span>
+          </div> 
           <div class="form-group has-feedback">
             <input type="Cuenta" name="cuenta_usuario" class="form-control" placeholder="Cuenta" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" title="ejemplo@gmail.com" required>
               <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -33,21 +45,11 @@ session_start();
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
           <div class="row" >
-            <div class="col-xs-8" style="width: 60%; text-align: left; padding-left: 10%">
-              <div class="checkbox icheck" style="">
-                <label>
-                  <input type="checkbox"> Recordar
-                </label>
-              </div>
-            </div>
             <div class="col-xs-4"  style="width: 40% !important;">
-              <button type="submit" class="btn btn-primary btn-block btn-flat">Iniciar Sesión</button>
+              <button type="submit" class="btn btn-primary btn-block btn-flat">Registrar Usuario</button>
             </div>
           </div>
         </form>
-        <div style="text-align: left">
-            <a href="registro.php" >Eres nuevo? Registrate</a><br>
-        </div>
       </div>
     </div>
   </div>

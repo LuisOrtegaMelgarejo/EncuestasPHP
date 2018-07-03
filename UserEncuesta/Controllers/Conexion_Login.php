@@ -16,9 +16,9 @@ if(mysqli_num_rows($resultado)!=0){
 	while( $row = mysqli_fetch_assoc($resultado)){
 	    $data = $row;
 	}
-	header("location: ../Inicio.php");
 	$_SESSION['user'] = $data['id'];
 	$_SESSION['estado'] = "conectado";
+	header("location: ../Inicio.php");
 }else {
 	header("location: ../index.php?error=si");
 }
