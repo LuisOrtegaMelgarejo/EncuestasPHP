@@ -22,6 +22,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
   <link href="//www.fuelcdn.com/fuelux/3.13.0/css/fuelux.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" /> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
   <style type="text/css">
   table{
       border: #e0e0e2 1px solid;
@@ -820,6 +821,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
 <script src="//www.fuelcdn.com/fuelux/3.13.0/js/fuelux.min.js"></script>
 <script src="Views/bower_components/fuelux/spinner.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <!-- DESDE AQUI COMIENZA EL CODIGO JS QUE SE EJECUTA CUANDO LE DAS CLICKS A LOS BOTONES. ES JQUERY BASICO -->
 <script>
   $(function(){
@@ -875,7 +877,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
 
             }
             tr += '<td>';
-                      tr += '<button disabled class="btn btn-xs btn-danger btn-eliminar-encuesta ttip" data-idencuesta="' + Encuesta.id_encuesta + '" data-placement="top" data-toggle="tooltip" title="Borrar Encuesta"><i class="fa fa-trash-o fa-fw"></i> <i class="preloader preloader-info hide"></i></button>';
+                      tr += '<button class="btn btn-xs btn-danger btn-eliminar-encuesta ttip" data-idencuesta="' + Encuesta.id_encuesta + '" data-placement="top" data-toggle="tooltip" title="Borrar Encuesta"><i class="fa fa-trash-o fa-fw"></i> <i class="preloader preloader-info hide"></i></button>';
             tr += '</td>';
             tr += '</tr>';
             $('#tb-encuesta tbody').append(tr);
@@ -909,8 +911,8 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
           if(resp.error){
             $('#cargando').modal('toggle');
             toastr.error('ERROR: ' + resp.message);
-              $('#crear-encuesta').modal('');
-              return false;
+            $('#crear-encuesta').modal('');
+            return false;
           }else{
             $('#cargando').modal('toggle');
             $('#crear-encuesta .nomenc').val('');
@@ -922,6 +924,67 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
         });
       });
       ////////////////////////////////////////////////////////////////////////////
+      $(document).on('click','.btn-eliminar-bloque',function(){
+        var id = $(this).data('idbloque');
+        var data = {};
+        data['id'] = id;
+        $('#cargando').modal();
+        $.post('Eliminar_Bloque.php',data,function(resp){
+          $('#cargando').modal('toggle');
+          if(resp.error){
+            toastr.error('ERROR: ' + resp.message);
+          }else{
+            $('#cargando').modal('toggle');
+            toastr.success('BLOQUE ELIMINADO CORRECTAMENTE');
+            listarBloques($('#row-bloque .id_encuesta').val());
+          }
+        },'json').fail(function(){
+          $('#cargando').modal('toggle');
+          toastr.error('ERROR AL ENVIAR/RECIBIR DATOS');
+        });
+      });
+      ////////////////////////////////////////////////////////////////////////////
+      $(document).on('click','.btn-eliminar-pregunta',function(){
+        var id = $(this).data('idpregunta');
+        var data = {};
+        data['id'] = id;
+        $('#cargando').modal();
+        $.post('Eliminar_Pregunta.php',data,function(resp){
+          $('#cargando').modal('toggle');
+          if(resp.error){
+            toastr.error('ERROR: ' + resp.message);
+          }else{
+            $('#cargando').modal('toggle');
+            toastr.success('PREGUNTA ELIMINADA CORRECTAMENTE');
+            listarPreguntas($('#row-pregunta .id_bloque').val());
+          }
+        },'json').fail(function(){
+          $('#cargando').modal('toggle');
+          toastr.error('ERROR AL ENVIAR/RECIBIR DATOS');
+        });
+      });
+      ////////////////////////////////////////////////////////////////////////////
+      $(document).on('click','.btn-eliminar-opcion',function(){
+        var id = $(this).data('idopcion');
+        var data = {};
+        data['id'] = id;
+        $('#cargando').modal();
+        $.post('Eliminar_Opcion.php',data,function(resp){
+          $('#cargando').modal('toggle');
+          if(resp.error){
+            toastr.error('ERROR: ' + resp.message);
+          }else{
+            $('#cargando').modal('toggle');
+            toastr.success('OPCION ELIMINADO CORRECTAMENTE');
+            listarOpciones($('#modal-opcion .id_pregunta').val());
+          }
+        },'json').fail(function(){
+          $('#cargando').modal('toggle');
+          toastr.error('ERROR AL ENVIAR/RECIBIR DATOS');
+        });
+      });
+      ////////////////////////////////////////////////////////////////////////////
+
       $(document).on('click','.btn-editar-encuesta',function(){
         var id = $(this).data('idencuesta');
         var data = {};
@@ -980,7 +1043,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
             if (isConfirm) {
               var data = {};
               data['id'] = id;
-              $.post('gestion-encuesta/eliminar',data,function(resp){
+              $.post('Eliminar_Encuesta.php',data,function(resp){
                 if(resp.error){
                   toastr.error('ERROR: ' + resp.message);
                 }else{
@@ -1039,7 +1102,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
                         tr += '<button class="btn btn-xs btn-warning btn-editar-bloque ttip" data-idbloque="' + Bloque.id_bloque + '" data-placement="top" data-toggle="tooltip" title="Editar Bloque"><i class="fa fa-pencil"></i> <i class="preloader preloader-info hide"></i></button>';
               tr += '</td>';
               tr += '<td>';
-                        tr += '<button disabled class="btn btn-xs btn-danger btn-eliminar-encuesta ttip" data-idbloque="' + Bloque.id_bloque + '" data-placement="top" data-toggle="tooltip" title="Borrar Bloque"><i class="fa fa-trash-o fa-fw"></i> <i class="preloader preloader-info hide"></i></button>';
+                        tr += '<button class="btn btn-xs btn-danger btn-eliminar-bloque ttip" data-idbloque="' + Bloque.id_bloque + '" data-placement="top" data-toggle="tooltip" title="Borrar Bloque"><i class="fa fa-trash-o fa-fw"></i> <i class="preloader preloader-info hide"></i></button>';
               tr += '</td>';
               tr += '</tr>';
               $('#tb-bloque tbody').append(tr);
@@ -1180,7 +1243,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
               tr += '</td>';
 
               tr += '<td>';
-                        tr += '<button disabled class="btn btn-xs btn-danger btn-eliminar-pregunta ttip" data-idpregunta="' + Pregunta.id_pregunta + '" data-placement="top" data-toggle="tooltip" title="Borrar Pregunta"><i class="fa fa-trash-o fa-fw"></i> <i class="preloader preloader-info hide"></i></button>';
+                        tr += '<button class="btn btn-xs btn-danger btn-eliminar-pregunta ttip" data-idpregunta="' + Pregunta.id_pregunta + '" data-placement="top" data-toggle="tooltip" title="Borrar Pregunta"><i class="fa fa-trash-o fa-fw"></i> <i class="preloader preloader-info hide"></i></button>';
               tr += '</td>';
               tr += '</tr>';
               $('#tb-pregunta tbody').append(tr);
@@ -1326,11 +1389,11 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
               tr += '<td></td>';
               tr += '<td></td>';
               tr += '<td>';
-                        tr += '<button class="btn btn-xs btn-warning btn-editar-opcion ttip" data-idopcion="' + Opcion.id_opcion + '" data-placement="top" data-toggle="tooltip" title="Editar Pregunta"><i class="fa fa-pencil"></i> <i class="preloader preloader-info hide"></i></button>';
+                        tr += '<button class="btn btn-xs btn-warning btn-editar-opcion ttip" data-idopcion="' + Opcion.id_opcion + '" data-placement="top" data-toggle="tooltip" title="Editar Opcion"><i class="fa fa-pencil"></i> <i class="preloader preloader-info hide"></i></button>';
               tr += '</td>';
 
               tr += '<td>';
-                        tr += '<button disabled class="btn btn-xs btn-danger btn-eliminar-pregunta ttip" data-idopcion="' + Opcion.id_pregunta + '" data-placement="top" data-toggle="tooltip" title="Borrar Pregunta"><i class="fa fa-trash-o fa-fw"></i> <i class="preloader preloader-info hide"></i></button>';
+                        tr += '<button class="btn btn-xs btn-danger btn-eliminar-opcion ttip" data-idopcion="' + Opcion.id_opcion + '" data-placement="top" data-toggle="tooltip" title="Borrar Opcion"><i class="fa fa-trash-o fa-fw"></i> <i class="preloader preloader-info hide"></i></button>';
               tr += '</td>';
               tr += '</tr>';
               $('#tb-opcion tbody').append(tr);
