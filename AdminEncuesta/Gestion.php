@@ -6,7 +6,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
   header('Location: index.php'); 
 }
 ?>
-
+<!-- desde la linea 17 a la 20 se llaman librerias como bootstrap y los font style que estan en la carpeta Views. En esta carpeta tambien se encuentran estilos css. Las imagenes e iconos estan en al carpeta img-->
 <!DOCTYPE html>
 <html>
 <head>
