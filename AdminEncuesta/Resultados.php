@@ -5,6 +5,8 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
 }
 require_once "Controllers/conexion.php";
 $Resultados=array();
+//Query para obtener las encuestas y calcular el promedio.
+//Si quieres calcular la varianza edita la query y guiate de aquí: https://www.w3resource.com/mysql/aggregate-functions-and-grouping/aggregate-functions-and-grouping-variance().php
 $resultado = mysqli_query($conexion,'SELECT  opc.id_encuesta,enc.c_nombre_encuesta,preg.id_pregunta,preg.c_titulo_pregunta,AVG(opc.n_valor) as promedio
                                       FROM tb_encuesta_respuesta_opcion resp
                                       JOIN tb_encuesta_pregunta_opcion opc
@@ -14,6 +16,7 @@ $resultado = mysqli_query($conexion,'SELECT  opc.id_encuesta,enc.c_nombre_encues
                                       JOIN tb_encuesta enc
                                       ON enc.id_encuesta=resp.id_encuesta
                                       GROUP BY opc.id_pregunta,opc.id_encuesta');
+//con mysqli_fetch_object devuelve la fila actual del conjunto de resultados ($resultado) como un objeto, donde los atributos del objeto representan los nombres de los campos encontrados en el conjunto de resultados. En resumen lo devuelve como un vector tipo clave valor. como un diccionario. 
 while( $row = mysqli_fetch_object($resultado)){
     $Resultados[] = $row;
 }

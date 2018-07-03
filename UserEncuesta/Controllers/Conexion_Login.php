@@ -2,6 +2,7 @@
 
 require_once "conexion.php";
 
+//Envia la cuenta y password como query a la bd para ver si existen
 $cuenta= $_POST["cuenta_usuario"];
 $password= $_POST["contraseña_usuario"];
 

@@ -1,5 +1,7 @@
 <?php
+//session_start() crea una sesión o reanuda la actual basada en un identificador de sesión pasado mediante una petición GET o POST, o pasado mediante una cookie. 
 session_start();
+//$_SESSION es un array asociativo que contiene variables de sesión disponibles
 if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
   header('Location: index.php'); 
 }
@@ -818,6 +820,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
 <script src="//www.fuelcdn.com/fuelux/3.13.0/js/fuelux.min.js"></script>
 <script src="Views/bower_components/fuelux/spinner.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<!-- DESDE AQUI COMIENZA EL CODIGO JS QUE SE EJECUTA CUANDO LE DAS CLICKS A LOS BOTONES. ES JQUERY BASICO -->
 <script>
   $(function(){
       $('#row-encuestas').hide();
@@ -845,7 +848,7 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
         $('#cargando').modal();
         var data={};
         data['page']=page;
-
+        //SE OBTIENEN LAS ENCUESTAS HACIENDO LLAMADA AL ARCHIVO LISTAR_ENCUESTA.PHP. LA RESPUESTA ES LA VARIABLE RESP
         $.get('Listar_Encuesta.php',data,function(resp){
           $('#tb-encuesta tbody').empty();
           $('#pagination').empty();

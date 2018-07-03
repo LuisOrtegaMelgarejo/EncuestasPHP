@@ -1,5 +1,5 @@
 <?php 
-
+//Cierra todas las sesiones que se crearon inicialmente
 header('location: ../index.php'); 
 
     session_start();
