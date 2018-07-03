@@ -1,7 +1,7 @@
 
 # Sistema de Encuestas en PHP
 
-####Pasos para levantar localmente el servidor
+#### Pasos para levantar localmente el servidor
                 
 1. Instalar XAMPP
 2. Iniciar el servidor Apache y MySQL
