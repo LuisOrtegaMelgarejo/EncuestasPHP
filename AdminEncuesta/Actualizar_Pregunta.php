@@ -3,7 +3,7 @@
 require_once "Controllers/conexion.php";
 
 $query = "update tb_encuesta_pregunta
-	      set c_detalle_pregunta = '".$_POST['detpreg']."',
+	      set c_detalle_pregunta = '',
 	      c_titulo_pregunta  = '".$_POST['nompreg']."',
 	      n_orden_pregunta  = '".$_POST['numpreg']."',
 	      c_tipo_pregunta  = '".$_POST['tipopreg']."'

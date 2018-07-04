@@ -5,7 +5,7 @@ require_once "Controllers/conexion.php";
 $idblo= $_POST['idblo'];
 $idenc= $_POST['idenc'];
 $nompreg= $_POST['nompreg'];
-$detpreg= $_POST['detpreg'];
+$detpreg= '';
 $numpreg= $_POST['numpreg'];
 $tipopreg= $_POST['tipopreg'];
 

@@ -180,7 +180,7 @@ foreach ($Bloques as $Bloque) {
                                       <?php if($Pregunta->c_tipo_pregunta == 'SS'){ ?>
                                         <span class="hidden-sm" style="color: red;">*</span>
                                       <?php } ?>
-                                        <span class="hidden-sm wht-color"><?php echo $Pregunta->c_titulo_pregunta.": ".$Pregunta->c_detalle_pregunta; ?></span>
+                                        <span class="hidden-sm wht-color"><?php echo $Pregunta->n_orden_pregunta.".- ".$Pregunta->c_titulo_pregunta; ?></span>
                                     </header>
                                     <div class="panel-body">
                                       <div class="form-group">

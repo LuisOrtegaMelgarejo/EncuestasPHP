@@ -5,22 +5,12 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
 }
 require_once "Controllers/conexion.php";
 $Resultados=array();
-//Query para obtener las encuestas y calcular el promedio.
-//Si quieres calcular la varianza edita la query y guiate de aquí: https://www.w3resource.com/mysql/aggregate-functions-and-grouping/aggregate-functions-and-grouping-variance().php
-$resultado = mysqli_query($conexion,'SELECT  opc.id_encuesta,enc.c_nombre_encuesta,preg.id_pregunta,preg.c_titulo_pregunta,AVG(opc.n_valor) as promedio
-                                      FROM tb_encuesta_respuesta_opcion resp
-                                      JOIN tb_encuesta_pregunta_opcion opc
-                                      ON resp.id_opcion=opc.id_opcion
-                                      JOIN tb_encuesta_pregunta preg
-                                      ON resp.id_pregunta=preg.id_pregunta
-                                      JOIN tb_encuesta enc
-                                      ON enc.id_encuesta=resp.id_encuesta
-                                      GROUP BY opc.id_pregunta,opc.id_encuesta');
+
+$resultado = mysqli_query($conexion,'SELECT * FROM tb_encuesta');
 //con mysqli_fetch_object devuelve la fila actual del conjunto de resultados ($resultado) como un objeto, donde los atributos del objeto representan los nombres de los campos encontrados en el conjunto de resultados. En resumen lo devuelve como un vector tipo clave valor. como un diccionario. 
 while( $row = mysqli_fetch_object($resultado)){
     $Resultados[] = $row;
 }
-$i=-1;
 ?>
 <!DOCTYPE html>
 <html>
@@ -130,34 +120,74 @@ $i=-1;
                 </div>
               </header>
               <div class="panel-body">
-                <div class="col-sm-12">
                  <?php foreach($Resultados as $result){ ?>
-                  <?php if ($i != $result->id_encuesta){ ?>
-                    <?php if ($i != -1){ ?>
-                              </tbody>
-                          </table>
-                    <?php } ?>
-                          <h3><?php echo $result->c_nombre_encuesta; ?></h3>
+                  <div class="col-sm-6">
+                    <h3><?php echo $result->c_nombre_encuesta; ?></h3>
                           <table class="table table-striped table-hover">
                             <thead>
-                              <th>Pregunta</th>
-                              <th>Promedio</th>
+                              <th width="60%"></th>
+                              <th style="text-align: right;">Promedio</th>
                             </thead>
-                            <tbody>   
-                  <?php 
-                        $i = $result->id_encuesta;
-                      } ?>
-                       
-                      <tr>
-                        <td><?php echo $result->c_titulo_pregunta?></td>
-                        <td><?php echo $result->promedio?></td>
-                      </tr>
-              <?php } ?>
-              <?php if ($i == -1){ ?>
-                              </tbody>
+                            <tbody>
+                              <?php 
+                              //Query para obtener las encuestas y calcular el promedio.
+                              //Si quieres calcular la varianza edita la query y guiate de aquí: https://www.w3resource.com/mysql/aggregate-functions-and-grouping/aggregate-functions-and-grouping-variance().php
+                                  $Bloques = array();
+                                  $resultado2 = mysqli_query($conexion,'SELECT 
+                                                                          prom.id_bloque,
+                                                                          blo.c_nombre_bloque,
+                                                                          ROUND(AVG(promedio),2) AS promedio
+                                                                        FROM
+                                                                        (SELECT
+                                                                          opc.id_encuesta,
+                                                                          preg.id_bloque,
+                                                                          opc.id_pregunta,  
+                                                                          ROUND(AVG(opc.n_valor), 2) AS promedio
+                                                                        FROM
+                                                                          tb_encuesta_respuesta_opcion resp
+                                                                        JOIN tb_encuesta_pregunta_opcion opc ON resp.id_opcion = opc.id_opcion
+                                                                        JOIN tb_encuesta_pregunta preg ON preg.id_pregunta=opc.id_pregunta
+                                                                        GROUP BY
+                                                                          opc.id_pregunta) prom
+                                                                        JOIN tb_encuesta_bloque blo ON blo.id_bloque = prom.id_bloque
+                                                                        GROUP BY id_bloque,prom.id_encuesta
+                                                                        HAVING prom.id_encuesta='.$result->id_encuesta);
+                                  while( $row = mysqli_fetch_object($resultado2)){
+                                      $Bloques[] = $row;
+                                  }                             
+                                  foreach ($Bloques as $blo) {
+                                    echo "<tr><td><strong>".$blo->c_nombre_bloque."</strong></td><td style='text-align: right;'>".$blo->promedio."</td></tr>";
+                              ?>   
+                              <?php 
+                              //Query para obtener las encuestas y calcular el promedio.
+                              //Si quieres calcular la varianza edita la query y guiate de aquí: https://www.w3resource.com/mysql/aggregate-functions-and-grouping/aggregate-functions-and-grouping-variance().php
+                                  $Preguntas = array();
+                                  $resultado3 = mysqli_query($conexion,'SELECT  
+                                                                            opc.id_encuesta,enc.c_nombre_encuesta,preg.id_pregunta,
+                                                                            preg.c_titulo_pregunta,ROUND(AVG(opc.n_valor),2) as promedio
+                                                                        FROM tb_encuesta_respuesta_opcion resp
+                                                                        JOIN tb_encuesta_pregunta_opcion opc
+                                                                        ON resp.id_opcion=opc.id_opcion
+                                                                        JOIN tb_encuesta_pregunta preg
+                                                                        ON resp.id_pregunta=preg.id_pregunta
+                                                                        JOIN tb_encuesta enc
+                                                                        ON enc.id_encuesta=resp.id_encuesta
+                                                                        GROUP BY opc.id_pregunta,preg.id_bloque,opc.id_encuesta
+                                                                        HAVING preg.id_bloque = '.$blo->id_bloque);
+                                  while( $row = mysqli_fetch_object($resultado3)){
+                                      $Preguntas[] = $row;
+                                  }                             
+                                  foreach ($Preguntas as $preg) {
+                                    echo "<tr><td>".$preg->c_titulo_pregunta."</td><td style='text-align: right;'>".$preg->promedio."</td></tr>";
+                                  }
+                                }
+
+                              ?>
+
+                            </tbody>
                           </table>
+                        </div>
                     <?php } ?>
-                </div>
               </div>
             </section>
           </div>

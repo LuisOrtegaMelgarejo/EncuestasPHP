@@ -250,7 +250,6 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
                   <tr>
                     <th>Orden</th>
                     <th>Titulo de la Pregunta</th>
-                    <th>Detalle de la Pregunta</th>
                     <th>Tipo Pregunta</th>
                     <th></th>
                     <th></th>
@@ -513,12 +512,6 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
               </div>
               <div class="form-group">
                 <div class="col-sm-12">
-                    <label for="fono1">Detalle de la pregunta</label>
-                  <input class="form-control detpreg" name="detpreg" type="text" required >
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-12">
                     <label for="fono1">Orden de la pregunta</label>
                     <div id="spinner3">
                       <div class="input-group input-small">
@@ -580,12 +573,6 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
                 <div class="col-sm-12">
                     <label for="fono1">Titulo de la pregunta</label>
                   <input class="form-control nompreg" name="nompreg" type="text" required >
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-12">
-                    <label for="fono1">Detalle de la pregunta</label>
-                  <input class="form-control detpreg" name="detpreg" type="text" required >
                 </div>
               </div>
               <div class="form-group">
@@ -1227,7 +1214,6 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
 
               tr += '<td width="5%">' + Pregunta.n_orden_pregunta  + '</td>';
               tr += '<td>' + Pregunta.c_titulo_pregunta + '</td>';
-              tr += '<td>' + Pregunta.c_detalle_pregunta + '</td>';
               tr += '<td>' + Pregunta.c_tipo_pregunta + '</td>';
               tr += '<td></td>';
               tr += '<td></td>';
@@ -1313,7 +1299,6 @@ if(!isset($_SESSION['admin']) || $_SESSION['estado'] != "conectado"){
             $('#f-editar-pregunta .nomblo').val($('#row-pregunta .nombre_bloque').val());
             $('#f-editar-pregunta .idpreg').val(resp.data.id_pregunta);
             $('#f-editar-pregunta .nompreg').val(resp.data.c_titulo_pregunta);
-            $('#f-editar-pregunta .detpreg').val(resp.data.c_detalle_pregunta);
             $('#f-editar-pregunta #spinner4').spinner('value',resp.data.n_orden_pregunta);
             $('#f-editar-pregunta #tipopreg').val(resp.data.c_tipo_pregunta);
             $('#editar-pregunta').modal();
